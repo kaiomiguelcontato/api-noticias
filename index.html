@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias Trabalhistas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            margin: 0;
+        }
+        #noticias {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .noticia {
+            background: white;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Últimas Notícias Trabalhistas</h1>
+    <div id="noticias">
+        <p>Carregando notícias...</p>
+    </div>
+
+
+    <section id="noticias-section">
+        <h2>Últimas Notícias Trabalhistas</h2>
+        <div id="noticias-container">Carregando...</div>
+    </section>
+    
+    <script>
+        async function carregarNoticias() {
+            try {
+                let resposta = await fetch("http://127.0.0.1:5000/noticias");
+                if (!resposta.ok) throw new Error("Erro na API: " + resposta.status);
+                
+                let dados = await resposta.json();
+                let container = document.getElementById("noticias-container");
+    
+                if (!dados || dados.length === 0) {
+                    container.innerHTML = "<p>Nenhuma notícia encontrada.</p>";
+                    return;
+                }
+    
+                container.innerHTML = ""; // Limpa antes de adicionar novas notícias
+    
+                dados.forEach(noticia => {
+                    let div = document.createElement("div");
+                    div.className = "noticia-card";
+                    div.innerHTML = `
+                        <h3>${noticia.titulo}</h3>
+                        <p><strong>Fonte:</strong> ${noticia.fonte}</p>
+                        <p><strong>Publicado em:</strong> ${new Date(noticia.publicado_em).toLocaleString()}</p>
+                        <a href="${noticia.link}" target="_blank">Leia mais</a>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (erro) {
+                console.error("Erro ao buscar notícias:", erro);
+                document.getElementById("noticias-container").innerHTML = "<p>Erro ao carregar notícias.</p>";
+            }
+            let dados = await resposta.json();
+console.log("Notícias recebidas:", dados);
+        }
+    
+        window.onload = carregarNoticias;
+    </script>
+    
+    <style>
+        #noticias-section {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+        #noticias-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .noticia-card {
+            background: white;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
+
+    <script>
+        async function carregarNoticias() {
+            try {
+                let resposta = await fetch("http://127.0.0.1:5000/noticias");
+                if (!resposta.ok) throw new Error("Erro na API: " + resposta.status);
+                
+                let dados = await resposta.json();
+                let container = document.getElementById("noticias");
+
+                if (!dados || dados.length === 0) {
+                    container.innerHTML = "<p>Nenhuma notícia encontrada.</p>";
+                    return;
+                }
+
+                container.innerHTML = ""; // Limpa antes de adicionar novas notícias
+
+                dados.forEach(noticia => {
+                    let div = document.createElement("div");
+                    div.className = "noticia";
+                    div.innerHTML = `
+                        <h3>${noticia.titulo}</h3>
+                        <p><strong>Fonte:</strong> ${noticia.fonte}</p>
+                        <p><strong>Publicado em:</strong> ${new Date(noticia.publicado_em).toLocaleString()}</p>
+                        <a href="${noticia.link}" target="_blank">Leia mais</a>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (erro) {
+                console.error("Erro ao buscar notícias:", erro);
+                document.getElementById("noticias").innerHTML = "<p>Erro ao carregar notícias.</p>";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", carregarNoticias);
+    </script>
+
+</body>
+</html>
